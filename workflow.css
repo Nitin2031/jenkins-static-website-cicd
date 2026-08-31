@@ -51,3 +51,7 @@
   .flow-unit { min-height: 220px; }
   .workflow-legend strong { line-height: 1.5; }
 }
+.footer-credit { text-align: right; }
+.footer-credit h3 { margin: 5px 0; color: var(--text); font: 700 17px var(--mono); letter-spacing: .025em; }
+.footer-credit h3:last-child { color: var(--cyan); font-size: 14px; }
+@media (max-width: 650px) { .footer-credit { text-align: left; } }
