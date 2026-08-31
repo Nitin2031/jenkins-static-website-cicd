@@ -3,140 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Static website deployed automatically through Jenkins CI/CD on AWS EC2.">
-  <title>Jenkins CI/CD | AWS Deployment</title>
+  <meta name="description" content="Interactive Jenkins CI/CD deployment project on AWS EC2.">
+  <title>DeployForge | Jenkins CI/CD</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="background-grid" aria-hidden="true"></div>
-
-  <header class="navigation">
-    <a class="brand" href="#home" aria-label="Pipeline home">
-      <span class="brand-mark">J</span>
-      <span>Jenkins<span class="accent">Flow</span></span>
-    </a>
-    <nav aria-label="Main navigation">
-      <a href="#pipeline">Pipeline</a>
-      <a href="#stack">Stack</a>
-      <a href="#about">About</a>
-    </nav>
-    <span class="status"><span class="status-dot"></span> Pipeline active</span>
+  <div class="grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="logo" href="#home"><span>DF</span>DeployForge</a>
+    <nav><a href="#architecture">Architecture</a><a href="#pipeline">Pipeline</a><a href="#stack">Stack</a></nav>
+    <div class="live"><i></i>System operational</div>
   </header>
 
   <main>
     <section class="hero" id="home">
-      <div class="hero-copy">
-        <p class="eyebrow">AWS EC2 • JENKINS • NGINX</p>
-        <h1>From <span>git push</span><br>to production.</h1>
-        <p class="hero-text">
-          A fully automated CI/CD pipeline that validates and deploys this
-          static website from GitHub to an Nginx server on AWS EC2.
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button" href="#pipeline">Explore pipeline</a>
-          <a class="secondary-button" href="#stack">View technology stack</a>
-        </div>
-        <div class="hero-meta">
-          <div><strong>4</strong><span>Pipeline stages</span></div>
-          <div><strong>2</strong><span>EC2 instances</span></div>
-          <div><strong>1</strong><span>Automated workflow</span></div>
-        </div>
+      <div>
+        <div class="badge">● BUILD #42 DEPLOYED</div>
+        <h1>Ship static sites<br><em>without manual work.</em></h1>
+        <p class="intro">An end-to-end Jenkins pipeline that turns every GitHub update into a validated, securely deployed and health-checked release on AWS.</p>
+        <div class="actions"><a class="button primary" href="#pipeline">Run pipeline demo →</a><a class="button ghost" href="#architecture">View architecture</a></div>
+        <div class="metrics"><div><strong>4</strong><span>Automated stages</span></div><div><strong>2</strong><span>AWS EC2 nodes</span></div><div><strong>100%</strong><span>Repeatable delivery</span></div></div>
       </div>
-
-      <div class="terminal-card" aria-label="Successful Jenkins deployment">
-        <div class="terminal-top">
-          <span></span><span></span><span></span>
-          <p>jenkins-pipeline</p>
-        </div>
-        <div class="terminal-content">
-          <p><span class="prompt">$</span> git push origin main</p>
-          <p class="muted">Triggering Jenkins pipeline...</p>
-          <p><span class="success">✓</span> Checkout source code</p>
-          <p><span class="success">✓</span> Validate HTML and CSS</p>
-          <p><span class="success">✓</span> Deploy with rsync over SSH</p>
-          <p><span class="success">✓</span> HTTP health check passed</p>
-          <div class="terminal-result">
-            <span>BUILD SUCCESS</span>
-            <span>#latest</span>
+      <div class="console-wrap">
+        <div class="console">
+          <div class="console-head"><div><i></i><i></i><i></i></div><span>deployforge / main</span><b>LIVE</b></div>
+          <div class="console-body">
+            <p><span>09:41:02</span> <b>INFO</b> GitHub push received</p>
+            <p><span>09:41:04</span> <mark>PASS</mark> Source checkout complete</p>
+            <p><span>09:41:05</span> <mark>PASS</mark> Website validation complete</p>
+            <p><span>09:41:08</span> <mark>PASS</mark> Files synchronized over SSH</p>
+            <p><span>09:41:11</span> <mark>PASS</mark> HTTP 200 health check</p>
+            <div class="result"><strong>✓ DEPLOYMENT SUCCESSFUL</strong><small>9.2s</small></div>
           </div>
         </div>
+        <div class="float top">▲ <span><b>main</b><small>Production branch</small></span></div>
+        <div class="float bottom">✓ <span><b>HTTP 200</b><small>Nginx healthy</small></span></div>
       </div>
     </section>
 
-    <section class="pipeline-section" id="pipeline">
-      <div class="section-heading">
-        <p class="eyebrow">AUTOMATED DELIVERY</p>
-        <h2>One push. Four reliable stages.</h2>
-        <p>Every change follows the same repeatable path from source code to the live website.</p>
+    <section class="section" id="architecture">
+      <header class="section-title"><span>01 / ARCHITECTURE</span><h2>Separated by design.<br>Connected by automation.</h2><p>Jenkins and the production website run on independent EC2 instances inside the same AWS VPC.</p></header>
+      <div class="architecture">
+        <article><div class="node-icon">GH</div><small>SOURCE</small><h3>GitHub Repository</h3><p>HTML, CSS, JavaScript and Jenkinsfile on the main branch.</p><code>HTTPS • Git</code></article>
+        <div class="route"><b>Webhook / SCM</b><span><i></i></span></div>
+        <article class="focus"><div class="node-icon">J</div><small>BUILD SERVER</small><h3>Jenkins EC2</h3><p>Checks out, validates and deploys each approved release.</p><code>Ubuntu • Port 8080</code></article>
+        <div class="route"><b>SSH + rsync</b><span><i></i></span></div>
+        <article class="production"><div class="node-icon">N</div><small>PRODUCTION</small><h3>Nginx EC2</h3><p>Serves the latest static release to users over HTTP.</p><code>Ubuntu • Port 80</code></article>
       </div>
-
-      <div class="pipeline">
-        <article class="pipeline-step">
-          <span class="step-number">01</span>
-          <div class="icon github-icon" aria-hidden="true">⌘</div>
-          <h3>Checkout</h3>
-          <p>Jenkins retrieves the latest HTML and CSS from the main GitHub branch.</p>
-          <span class="step-state">Source ready</span>
-        </article>
-        <span class="connector" aria-hidden="true">→</span>
-        <article class="pipeline-step">
-          <span class="step-number">02</span>
-          <div class="icon validate-icon" aria-hidden="true">✓</div>
-          <h3>Validate</h3>
-          <p>The pipeline confirms that all required website files are available.</p>
-          <span class="step-state">Checks passed</span>
-        </article>
-        <span class="connector" aria-hidden="true">→</span>
-        <article class="pipeline-step">
-          <span class="step-number">03</span>
-          <div class="icon deploy-icon" aria-hidden="true">⇧</div>
-          <h3>Deploy</h3>
-          <p>Rsync securely copies the release to the separate Nginx EC2 server.</p>
-          <span class="step-state">Files synced</span>
-        </article>
-        <span class="connector" aria-hidden="true">→</span>
-        <article class="pipeline-step">
-          <span class="step-number">04</span>
-          <div class="icon health-icon" aria-hidden="true">♡</div>
-          <h3>Health check</h3>
-          <p>An HTTP request verifies that the deployed website is responding.</p>
-          <span class="step-state">HTTP 200</span>
-        </article>
+      <div class="security">
+        <div><b>◈ Private deployment</b><p>Jenkins uses the web server's VPC private IP.</p></div>
+        <div><b>⌁ Key authentication</b><p>No deployment password is stored in source control.</p></div>
+        <div><b>◎ Health verification</b><p>Every release finishes with an HTTP check.</p></div>
       </div>
     </section>
 
-    <section class="stack-section" id="stack">
-      <div class="section-heading">
-        <p class="eyebrow">TECHNOLOGY STACK</p>
-        <h2>Simple tools. Real automation.</h2>
-      </div>
-      <div class="stack-grid">
-        <article><span class="stack-logo aws">aws</span><div><h3>AWS EC2</h3><p>Cloud infrastructure</p></div></article>
-        <article><span class="stack-logo jenkins">J</span><div><h3>Jenkins</h3><p>Pipeline orchestration</p></div></article>
-        <article><span class="stack-logo git">G</span><div><h3>GitHub</h3><p>Source-code management</p></div></article>
-        <article><span class="stack-logo nginx">N</span><div><h3>Nginx</h3><p>Production web server</p></div></article>
-        <article><span class="stack-logo ssh">&gt;_</span><div><h3>SSH + rsync</h3><p>Secure deployment</p></div></article>
-        <article><span class="stack-logo web">&lt;/&gt;</span><div><h3>HTML + CSS</h3><p>Responsive interface</p></div></article>
+    <section class="section" id="pipeline">
+      <header class="section-title"><span>02 / INTERACTIVE PIPELINE</span><h2>Watch a release move to production.</h2><p>Start the simulation to see how Jenkins processes a GitHub change.</p></header>
+      <div class="pipeline-panel">
+        <div class="toolbar"><div><i></i><b id="pipelineStatus">Pipeline ready</b></div><button id="runPipeline">▶ Run deployment</button></div>
+        <div class="stages">
+          <article class="stage"><div><span>01</span><i>⌘</i></div><h3>Checkout</h3><p>Pull the latest commit from GitHub.</p><small>Waiting</small></article><div class="line"><i></i></div>
+          <article class="stage"><div><span>02</span><i>✓</i></div><h3>Validate</h3><p>Check all required website files.</p><small>Waiting</small></article><div class="line"><i></i></div>
+          <article class="stage"><div><span>03</span><i>⇧</i></div><h3>Deploy</h3><p>Synchronize files using rsync.</p><small>Waiting</small></article><div class="line"><i></i></div>
+          <article class="stage"><div><span>04</span><i>♡</i></div><h3>Health check</h3><p>Verify an HTTP 200 response.</p><small>Waiting</small></article>
+        </div>
+        <div class="pipeline-log" aria-live="polite"><b>$</b> <span id="logText">Ready to process the next commit on main.</span><i></i></div>
       </div>
     </section>
 
-    <section class="about-section" id="about">
-      <div>
-        <p class="eyebrow">PROJECT OUTCOME</p>
-        <h2>Built to understand CI/CD by doing.</h2>
+    <section class="section" id="stack">
+      <header class="section-title"><span>03 / TECHNOLOGY</span><h2>A focused DevOps toolchain.</h2></header>
+      <div class="tools">
+        <article><div class="tool aws">aws</div><h3>AWS EC2</h3><p>Compute infrastructure for build and production workloads.</p><small>CLOUD</small></article>
+        <article><div class="tool jenkins">J</div><h3>Jenkins</h3><p>Pipeline orchestration, validation and deployment automation.</p><small>CI/CD</small></article>
+        <article><div class="tool github">GH</div><h3>GitHub</h3><p>Version-controlled source code and change history.</p><small>SCM</small></article>
+        <article><div class="tool nginx">N</div><h3>Nginx</h3><p>Fast and reliable production web serving on Ubuntu.</p><small>WEB</small></article>
+        <article><div class="tool linux">&gt;_</div><h3>Linux + SSH</h3><p>Secure administration and key-based remote deployment.</p><small>OPS</small></article>
+        <article><div class="tool rsync">↻</div><h3>Rsync</h3><p>Efficient synchronization of changed website files.</p><small>DELIVERY</small></article>
       </div>
-      <p>
-        This project separates the Jenkins controller and Nginx web server
-        across two AWS EC2 instances. It demonstrates source control,
-        automated validation, SSH-based deployment, health checks and a
-        repeatable software delivery workflow.
-      </p>
     </section>
+
+    <section class="outcome"><div><span>PROJECT OUTCOME</span><h2>Visible, testable and repeatable automation.</h2></div><p>This project demonstrates source control, Jenkins-as-code, isolated infrastructure, SSH deployment, synchronized releases and automated service validation.</p></section>
   </main>
-
-  <footer>
-    <p>Designed and deployed by <strong>Nitin Jangir</strong></p>
-    <p>GitHub → Jenkins → AWS EC2 → Nginx</p>
-  </footer>
+  <footer><div class="logo"><span>DF</span>DeployForge</div><p>Designed &amp; deployed by <strong>Nitin Jangir</strong></p><p>GitHub → Jenkins → AWS EC2 → Nginx</p></footer>
 </body>
 </html>
