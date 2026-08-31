@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A futuristic Jenkins CI/CD control surface backed by real deployment metadata.">
-  <title>NJ - CI/CD</title>
-  <link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
+  <title>NEXUS//CI — Jenkins Deployment System</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="workflow.css"><script src="script.js" defer></script>
 </head>
 <body>
   <canvas id="network" aria-hidden="true"></canvas><div class="noise" aria-hidden="true"></div>
-  <header class="nav"><a class="wordmark" href="#top"><span class="mark">NJ</span><span>CI/<span>CD</span></span></a><nav><a href="#system">System</a><a href="#telemetry">Telemetry</a><a href="#simulator">Simulator</a></nav><div class="online"><i></i><span>PRODUCTION ONLINE</span></div></header>
+  <header class="nav"><a class="wordmark" href="#top"><span class="mark">N//</span><span>NEXUS<span>CI</span></span></a><nav><a href="#system">System</a><a href="#workflow">Workflow</a><a href="#telemetry">Telemetry</a><a href="#simulator">Simulator</a></nav><div class="online"><i></i><span>PRODUCTION ONLINE</span></div></header>
   <main id="top">
     <section class="hero">
       <div class="hero-copy"><p class="kicker"><span></span>JENKINS DELIVERY INFRASTRUCTURE</p><h1>Code enters.<br><em>Production emerges.</em></h1><p class="lead">A two-node AWS delivery system engineered for repeatable releases, secure transport and automatic verification.</p><div class="hero-actions"><a class="cta" href="#simulator">Initialize simulation <b>↗</b></a><a class="text-link" href="#system">Inspect system <span>→</span></a></div><div class="build-ticker"><span>LAST DEPLOYMENT</span><strong id="heroBuild">#--</strong><i></i><strong id="heroStatus">SYNCING</strong><small id="heroTime">Awaiting build-info.json</small></div></div>
@@ -27,8 +27,29 @@
       <div class="principles"><article><span>◇</span><div><b>Private VPC transport</b><p>Deployments use the target server's private address.</p></div></article><article><span>⌁</span><div><b>Key authentication</b><p>No password is stored inside the pipeline.</p></div></article><article><span>◉</span><div><b>Automated verification</b><p>HTTP validation closes every release.</p></div></article><article><span>↺</span><div><b>Versioned recovery</b><p>Git tags preserve previous releases.</p></div></article></div>
     </section>
 
+    <section class="section" id="workflow">
+      <header class="section-head"><div><span>02</span><p>END-TO-END WORKFLOW</p></div><h2>From source change<br>to production traffic.</h2></header>
+      <div class="workflow-map" aria-label="Jenkins CI/CD architecture workflow">
+        <div class="cloud-frame">
+          <div class="cloud-title"><span>aws</span><div><b>AWS CLOUD</b><small>VPC · AP-SOUTH-1</small></div></div>
+          <div class="workflow-track">
+            <article class="flow-unit external"><span class="flow-index">01</span><div class="flow-icon">DEV</div><h3>Developer</h3><p>Changes website files and pushes a commit.</p><small>GIT PUSH</small></article>
+            <div class="flow-wire"><b>HTTPS</b><i></i></div>
+            <article class="flow-unit external"><span class="flow-index">02</span><div class="flow-icon">GH</div><h3>GitHub</h3><p>Stores source code and the Jenkinsfile.</p><small>MAIN BRANCH</small></article>
+            <div class="flow-wire"><b>WEBHOOK / POLL</b><i></i></div>
+            <article class="flow-unit ec2 jenkins-flow"><span class="flow-index">03</span><div class="instance-tag">EC2 · UBUNTU</div><div class="flow-icon">J</div><h3>Jenkins Server</h3><p>Checks out, validates and builds deployment metadata.</p><small>PORT 8080</small></article>
+            <div class="flow-wire secure"><b>SSH + RSYNC</b><i></i></div>
+            <article class="flow-unit ec2 web-flow"><span class="flow-index">04</span><div class="instance-tag">EC2 · UBUNTU</div><div class="flow-icon">N</div><h3>Nginx Web Server</h3><p>Receives the release in <code>/var/www/html</code>.</p><small>PORT 80</small></article>
+            <div class="flow-wire"><b>HTTP</b><i></i></div>
+            <article class="flow-unit external"><span class="flow-index">05</span><div class="flow-icon">UI</div><h3>Users</h3><p>Open the public IP and receive the latest website.</p><small>PRODUCTION</small></article>
+          </div>
+        </div>
+        <div class="workflow-legend"><span><i class="legend-source"></i>External source</span><span><i class="legend-ec2"></i>AWS EC2 instance</span><span><i class="legend-data"></i>Automated data flow</span><strong>Security groups allow 8080 for Jenkins, 22 between servers and 80 for users.</strong></div>
+      </div>
+    </section>
+
     <section class="section" id="telemetry">
-      <header class="section-head"><div><span>02</span><p>LIVE DEPLOYMENT DATA</p></div><h2>Real metadata.<br>Zero exposed credentials.</h2></header>
+      <header class="section-head"><div><span>03</span><p>LIVE DEPLOYMENT DATA</p></div><h2>Real metadata.<br>Zero exposed credentials.</h2></header>
       <div class="dashboard">
         <article class="build-card"><div class="card-label">CURRENT RELEASE <i></i></div><strong id="buildNumber">#--</strong><p id="buildResult">Loading deployment state</p><div class="mini-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
         <article class="data-card"><span>COMMIT</span><strong id="commitHash">-------</strong><small>Git revision deployed</small></article><article class="data-card"><span>BRANCH</span><strong id="branchName">main</strong><small>Production source</small></article><article class="data-card"><span>DEPLOYED AT</span><strong id="deployedAt">--:--</strong><small id="deployedDate">Awaiting pipeline</small></article><article class="data-card"><span>WEB HEALTH</span><strong class="healthy">HTTP 200</strong><small>Nginx response</small></article>
@@ -37,12 +58,12 @@
     </section>
 
     <section class="section" id="simulator">
-      <header class="section-head"><div><span>03</span><p>PIPELINE SIMULATOR</p></div><h2>Trigger a virtual<br>production release.</h2></header>
+      <header class="section-head"><div><span>04</span><p>PIPELINE SIMULATOR</p></div><h2>Trigger a virtual<br>production release.</h2></header>
       <div class="simulator-shell"><div class="sim-top"><div><i></i><span id="simulationStatus">SYSTEM READY</span></div><button id="launch">LAUNCH PIPELINE <b>▶</b></button></div><div class="stage-grid"><article class="stage" data-name="Checkout"><span>01</span><div>⌘</div><h3>Checkout</h3><p>Fetch main from GitHub</p><small>STANDBY</small></article><article class="stage" data-name="Validate"><span>02</span><div>✓</div><h3>Validate</h3><p>Inspect required assets</p><small>STANDBY</small></article><article class="stage" data-name="Deploy"><span>03</span><div>⇧</div><h3>Deploy</h3><p>Rsync over private SSH</p><small>STANDBY</small></article><article class="stage" data-name="Verify"><span>04</span><div>◎</div><h3>Verify</h3><p>Confirm HTTP response</p><small>STANDBY</small></article></div><div class="terminal"><span>nexus@jenkins:~$</span><p id="terminalText">Pipeline engine waiting for input.</p><i></i></div></div>
     </section>
 
-    <section class="section"><header class="section-head"><div><span>04</span><p>ENGINEERING STACK</p></div><h2>Purpose-built tools.<br>One delivery system.</h2></header><div class="stack-list"><article><b>01</b><div class="tech aws-tech">aws</div><h3>AWS EC2</h3><p>Isolated compute nodes</p><small>INFRASTRUCTURE</small></article><article><b>02</b><div class="tech jenkins-tech">J</div><h3>Jenkins</h3><p>Pipeline orchestration</p><small>AUTOMATION</small></article><article><b>03</b><div class="tech github-tech">GH</div><h3>GitHub</h3><p>Versioned source control</p><small>COLLABORATION</small></article><article><b>04</b><div class="tech nginx-tech">N</div><h3>Nginx</h3><p>Production web serving</p><small>RUNTIME</small></article><article><b>05</b><div class="tech ssh-tech">&gt;_</div><h3>SSH + rsync</h3><p>Secure asset transport</p><small>DELIVERY</small></article></div></section>
+    <section class="section"><header class="section-head"><div><span>05</span><p>ENGINEERING STACK</p></div><h2>Purpose-built tools.<br>One delivery system.</h2></header><div class="stack-list"><article><b>01</b><div class="tech aws-tech">aws</div><h3>AWS EC2</h3><p>Isolated compute nodes</p><small>INFRASTRUCTURE</small></article><article><b>02</b><div class="tech jenkins-tech">J</div><h3>Jenkins</h3><p>Pipeline orchestration</p><small>AUTOMATION</small></article><article><b>03</b><div class="tech github-tech">GH</div><h3>GitHub</h3><p>Versioned source control</p><small>COLLABORATION</small></article><article><b>04</b><div class="tech nginx-tech">N</div><h3>Nginx</h3><p>Production web serving</p><small>RUNTIME</small></article><article><b>05</b><div class="tech ssh-tech">&gt;_</div><h3>SSH + rsync</h3><p>Secure asset transport</p><small>DELIVERY</small></article></div></section>
   </main>
-  <footer class="footer"><div class="wordmark"><span class="mark">NJ</span><span>CI/<span>CD</span></span></div><p><h3>Engineered by</h3><strong><h3>Nitin Jangir</h3></strong></p><p>GitHub → Jenkins → AWS EC2 → Nginx</p></footer>
+  <footer class="footer"><div class="wordmark"><span class="mark">N//</span><span>NEXUS<span>CI</span></span></div><p>Engineered by <strong>Nitin Jangir</strong></p><p>GitHub → Jenkins → AWS EC2 → Nginx</p></footer>
 </body>
 </html>
